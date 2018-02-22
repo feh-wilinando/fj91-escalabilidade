@@ -2,22 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>escalabilidade</artifactId>
+        <groupId>br.com.caelum.fj91</groupId>
+        <version>1.1-SNAPSHOT</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>br.com.caelum.fj91</groupId>
-    <artifactId>escalabilidade</artifactId>
-    <packaging>pom</packaging>
-    <version>1.1-SNAPSHOT</version>
+    <artifactId>frontend</artifactId>
 
-    <modules>
-        <module>backend</module>
-        <module>frontend</module>
-    </modules>
-
-
-
-
-
-
+    <packaging>bundle</packaging>
 
 </project>
