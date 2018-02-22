@@ -1,4 +1,4 @@
-package br.com.caelum.fj91.escalabilidade.models;
+package escalabilidade.models;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;

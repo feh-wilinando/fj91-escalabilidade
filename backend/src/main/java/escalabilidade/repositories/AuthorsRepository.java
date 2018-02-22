@@ -1,6 +1,6 @@
-package br.com.caelum.fj91.escalabilidade.repositories;
+package escalabilidade.repositories;
 
-import br.com.caelum.fj91.escalabilidade.models.Author;
+import escalabilidade.models.Author;
 import org.springframework.data.repository.Repository;
 
 import java.util.Optional;

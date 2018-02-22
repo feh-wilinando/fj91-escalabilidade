@@ -1,4 +1,4 @@
-package br.com.caelum.fj91.escalabilidade.models;
+package escalabilidade.models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

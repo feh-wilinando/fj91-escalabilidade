@@ -1,7 +1,7 @@
-package br.com.caelum.fj91.escalabilidade.controller;
+package escalabilidade.controller;
 
-import br.com.caelum.fj91.escalabilidade.models.Book;
-import br.com.caelum.fj91.escalabilidade.repositories.BooksRepository;
+import escalabilidade.models.Author;
+import escalabilidade.repositories.AuthorsRepository;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,26 +10,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("books")
-public class BooksController {
+@RequestMapping("authors")
+public class AuthorsController {
 
 
-    private final BooksRepository repository;
+    private final AuthorsRepository repository;
 
-    public BooksController(BooksRepository repository) {
+    public AuthorsController(AuthorsRepository repository) {
         this.repository = repository;
     }
 
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Iterable<Book> getAll(){
+    public Iterable<Author> getAll(){
         return repository.findAll();
     }
 
-    @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Book> getById(@PathVariable Long id){
-        return repository.findById(id)
+
+    @GetMapping(value = "{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Author> getById(@PathVariable String name){
+        return repository.findByName(name)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
 }

@@ -1,7 +1,7 @@
-package br.com.caelum.fj91.escalabilidade.models.dtos;
+package escalabilidade.models.dtos;
 
-import br.com.caelum.fj91.escalabilidade.models.Author;
-import br.com.caelum.fj91.escalabilidade.models.Book;
+import escalabilidade.models.Author;
+import escalabilidade.models.Book;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 

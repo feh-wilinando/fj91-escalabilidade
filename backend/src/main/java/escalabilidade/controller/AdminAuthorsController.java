@@ -1,9 +1,9 @@
-package br.com.caelum.fj91.escalabilidade.controller;
+package escalabilidade.controller;
 
-import br.com.caelum.fj91.escalabilidade.helpers.BindingResultHelper;
-import br.com.caelum.fj91.escalabilidade.models.Author;
-import br.com.caelum.fj91.escalabilidade.models.Book;
-import br.com.caelum.fj91.escalabilidade.repositories.AuthorsRepository;
+import escalabilidade.helpers.BindingResultHelper;
+import escalabilidade.models.Author;
+import escalabilidade.models.Book;
+import escalabilidade.repositories.AuthorsRepository;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;

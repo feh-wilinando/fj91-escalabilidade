@@ -1,4 +1,4 @@
-package br.com.caelum.fj91.escalabilidade;
+package escalabilidade;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
