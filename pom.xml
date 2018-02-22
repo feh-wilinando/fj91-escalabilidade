@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>br.com.caelum.fj91</groupId>
+    <artifactId>escalabilidade</artifactId>
+    <version>1.1-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring.boot.version>1.5.10.RELEASE</spring.boot.version>
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+    </dependencies>
+
+
+
+    <profiles>
+
+        <!--Repository Docker Image Configuration-->
+        <profile>
+            <id>with-docker-account</id>
+            <activation>
+                <property>
+                    <name>env.DOCKER_LOGIN</name>
+                </property>
+            </activation>
+
+            <properties>
+                <docker.image.repository>${env.DOCKER_LOGIN}/${project.artifactId}</docker.image.repository>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>without-docker-account</id>
+            <activation>
+                <property>
+                    <name>!env.DOCKER_LOGIN</name>
+                </property>
+            </activation>
+
+            <properties>
+                <docker.image.repository>${project.artifactId}</docker.image.repository>
+            </properties>
+        </profile>
+
+
+        <!--Tag Docker Image Configuration-->
+        <profile>
+            <id>with-docker-image-tag</id>
+            <activation>
+                <property>
+                    <name>env.DOCKER_TAG</name>
+                </property>
+            </activation>
+            <properties>
+                <docker.image.tag>${env.DOCKER_TAG}</docker.image.tag>
+            </properties>
+        </profile>
+
+
+        <profile>
+            <id>without-docker-image-tag</id>
+            <activation>
+                <property>
+                    <name>!env.DOCKER_TAG</name>
+                </property>
+            </activation>
+            <properties>
+                <docker.image.tag>${project.version}</docker.image.tag>
+            </properties>
+        </profile>
+
+
+
+
+        <profile>
+            <id>with-push-docker-image</id>
+            <activation>
+                <property>
+                    <name>env.DOCKER_LOGIN</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>dockerfile-maven-plugin</artifactId>
+                        <version>1.3.7</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>javax.activation</groupId>
+                                <artifactId>activation</artifactId>
+                                <version>1.1.1</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                            <repository>${docker.image.repository}</repository>
+                        </configuration>
+
+                        <executions>
+                            <!--Build Versioned Image-->
+                            <execution>
+                                <id>versioned-image</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                    <goal>push</goal>
+                                </goals>
+
+                                <configuration>
+                                    <tag>${docker.image.tag}</tag>
+
+                                    <buildArgs>
+                                        <JAR_FILE>
+                                            target/${project.build.finalName}.${project.packaging}
+                                        </JAR_FILE>
+                                    </buildArgs>
+                                </configuration>
+                            </execution>
+
+                            <!--Re-tag versioned image to latest-->
+                            <execution>
+                                <id>latest-image</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>tag</goal>
+                                    <goal>push</goal>
+                                </goals>
+                                <configuration>
+                                    <tag>latest</tag>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+
+        <profile>
+            <id>without-push-docker-image</id>
+            <activation>
+                <property>
+                    <name>!env.DOCKER_LOGIN</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>dockerfile-maven-plugin</artifactId>
+                        <version>1.3.7</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>javax.activation</groupId>
+                                <artifactId>activation</artifactId>
+                                <version>1.1.1</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                            <repository>${docker.image.repository}</repository>
+                        </configuration>
+
+                        <executions>
+                            <!--Build Versioned Image-->
+                            <execution>
+                                <id>versioned-image</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+
+                                <configuration>
+                                    <tag>${docker.image.tag}</tag>
+
+                                    <buildArgs>
+                                        <JAR_FILE>
+                                            target/${project.build.finalName}.${project.packaging}
+                                        </JAR_FILE>
+                                    </buildArgs>
+                                </configuration>
+                            </execution>
+
+                            <!--Re-tag versioned image to latest-->
+                            <execution>
+                                <id>latest-image</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>tag</goal>
+                                </goals>
+                                <configuration>
+                                    <tag>latest</tag>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
