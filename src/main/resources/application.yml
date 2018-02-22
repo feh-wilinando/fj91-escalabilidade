@@ -1,0 +1,9 @@
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}/escalabilidade?createDatabaseIfNotExist=true&useSSL=false
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:}
